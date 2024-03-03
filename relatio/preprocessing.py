@@ -48,8 +48,9 @@ class Preprocessor:
         n_process: int = -1,
         batch_size: int = 1000,
     ):
-        if not spacy.util.is_package(spacy_model):
-            spacy_download(spacy_model)
+        # do it by hand on previous cells e.g. !python -m spacy download el_core_news_sm, the spacy download fails for these models
+        # if not spacy.util.is_package(spacy_model):
+        #     spacy_download(spacy_model)
 
         self.spacy_model = spacy_model
         self.nlp = spacy.load(spacy_model)
