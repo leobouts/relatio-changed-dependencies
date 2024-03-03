@@ -27,5 +27,5 @@ LANGUAGE_MODELS = {
     "fr_core_news_sm": {"language": "french", "size_vectors": 96},
     "fr_core_news_md": {"language": "french", "size_vectors": 300},
     "fr_core_news_lg": {"language": "french", "size_vectors": 300},
-    "el_core_news_md": {"language": "greek", "size_vectors": 300},
+    "el_core_news_sm": {"language": "greek", "size_vectors": 96},
 }
