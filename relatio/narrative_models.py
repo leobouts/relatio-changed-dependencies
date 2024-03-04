@@ -188,7 +188,7 @@ class NarrativeModel:
             # phrases = list(temp_counter)
             
             phrases = []
-            for item in slr_res:
+            for item in srl_res:
                 if role in item:
                     phrases.append(item[role])
                     
