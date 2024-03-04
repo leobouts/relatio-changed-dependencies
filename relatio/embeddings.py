@@ -156,7 +156,7 @@ class Embeddings(EmbeddingsBase):
         for i, phrase in enumerate(phrases):
             vector = self.get_vector(phrase)
             vectors_list.append(np.array([vector]))
-        if vectors_list
+        if vectors_list:
             vectors = np.concatenate(vectors_list)
             return vectors
         else:
