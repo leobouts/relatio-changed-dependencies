@@ -154,15 +154,13 @@ class Embeddings(EmbeddingsBase):
 
         vectors_list = []
         for i, phrase in enumerate(phrases):
-            print(phrase)
             vector = self.get_vector(phrase)
-            print(vector)
             vectors_list.append(np.array([vector]))
-        print(vectors_list)
-        vectors = np.concatenate(vectors_list)
-        print(vectors)
-        return vectors
-
+        if vectors_list
+            vectors = np.concatenate(vectors_list)
+            return vectors
+        else:
+            return []
     @staticmethod
     def compute_sif_weights(sentences: List[str], alpha: float) -> Dict[str, float]:
         """
