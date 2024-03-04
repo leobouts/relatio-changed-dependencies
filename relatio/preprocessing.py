@@ -12,6 +12,7 @@ from tqdm import tqdm
 from relatio.dependency_parsing import (
     extract_svos_en,
     extract_svos_fr,
+    extract_svos_gr,
     from_svos_to_srl_res,
 )
 from relatio.supported_models import LANGUAGE_MODELS
@@ -162,6 +163,8 @@ class Preprocessor:
                 svos = extract_svos_fr(sent, expand_nouns, only_triplets)
             elif self.language == "english":
                 svos = extract_svos_en(sent, expand_nouns, only_triplets)
+            elif self.language == "greek":
+                svos = extract_svos_gr(sent, expand_nouns, only_triplets)
             else:
                 raise ValueError(
                     "No Subject-Verb-Object (SVO) extraction function pre-coded for this language. Please provide a custom extraction function."
