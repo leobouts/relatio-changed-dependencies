@@ -38,7 +38,7 @@ class Preprocessor:
 
     def __init__(
         self,
-        spacy_model="en_core_web_sm",
+        spacy_model="el_core_news_sm",
         remove_punctuation: bool = True,
         remove_digits: bool = True,
         stop_words: List[str] = [],
@@ -54,7 +54,7 @@ class Preprocessor:
 
         self.spacy_model = spacy_model
         self.nlp = spacy.load(spacy_model)
-        self.language = LANGUAGE_MODELS[spacy_model].get("language", "unknown")
+        self.language = "greek"
         self.nlp.add_pipe("sentencizer")
         self.n_process = n_process
         self.batch_size = batch_size
