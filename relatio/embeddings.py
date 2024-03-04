@@ -154,9 +154,13 @@ class Embeddings(EmbeddingsBase):
 
         vectors_list = []
         for i, phrase in enumerate(phrases):
+            print(phrase)
             vector = self.get_vector(phrase)
+            print(vector)
             vectors_list.append(np.array([vector]))
+        print(vectors_list)
         vectors = np.concatenate(vectors_list)
+        print(vectors)
         return vectors
 
     @staticmethod
