@@ -4,7 +4,7 @@ from collections import Counter
 from copy import deepcopy
 from pathlib import Path
 from typing import Dict, List, Optional, Union
-
+import re
 import hdbscan
 import matplotlib.pyplot as plt
 import numpy as np
@@ -189,13 +189,14 @@ class NarrativeModel:
             
             phrases = []
             for item in srl_res:
+                print(item)
               for verb_data in item['verbs']:
                 description = verb_data['description']
                 pattern = r'\[' + role + r': (.*?)\]'
                 match = re.search(pattern, description)
                 if match:
                     phrases.append(match.group(1))
-
+                    
             # Remove known entities for the training of unknown entities
             if role in self.roles_with_known_entities:
                 if self.assignment_to_known_entities == "character_matching":
