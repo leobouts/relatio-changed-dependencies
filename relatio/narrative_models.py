@@ -183,9 +183,18 @@ class NarrativeModel:
         counter_for_phrases = Counter()
 
         for role in self.roles_with_unknown_entities:
-            temp_counter = count_values(srl_res, keys=[role])
-            counter_for_phrases = counter_for_phrases + temp_counter
-            phrases = list(temp_counter)
+            # temp_counter = count_values(srl_res, keys=[role])
+            # counter_for_phrases = counter_for_phrases + temp_counter
+            # phrases = list(temp_counter)
+            
+            phrases = []
+            for item in srl_res:
+              for verb_data in item['verbs']:
+                description = verb_data['description']
+                pattern = r'\[' + role + r': (.*?)\]'
+                match = re.search(pattern, description)
+                if match:
+                    phrases.append(match.group(1))
 
             # Remove known entities for the training of unknown entities
             if role in self.roles_with_known_entities:
