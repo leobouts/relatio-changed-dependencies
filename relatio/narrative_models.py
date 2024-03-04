@@ -186,6 +186,7 @@ class NarrativeModel:
             # temp_counter = count_values(srl_res, keys=[role])
             # counter_for_phrases = counter_for_phrases + temp_counter
             # phrases = list(temp_counter)
+            print(srl_res)
             phrases = []
             for item in srl_res:
                 print(item)
