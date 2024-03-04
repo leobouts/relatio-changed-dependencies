@@ -190,7 +190,7 @@ class NarrativeModel:
             phrases = []
             for item in slr_res:
                 if role in item:
-                phrases.append(item[role])
+                    phrases.append(item[role])
                     
             # Remove known entities for the training of unknown entities
             if role in self.roles_with_known_entities:
