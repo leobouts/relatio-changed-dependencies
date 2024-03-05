@@ -148,17 +148,18 @@ class Embeddings(EmbeddingsBase):
 
     # This will require refactoring for speed (in the case of spacy and USE)
     def get_vectors(self, phrases: str, progress_bar: bool = False) -> np.ndarray:
-        if progress_bar:
-            print("Computing phrase embeddings...")
-            phrases = tqdm(phrases)
+      if progress_bar:
+          print("Computing phrase embeddings...")
+          phrases = tqdm(phrases)
 
-        vectors_list = []
-        for i, phrase in enumerate(phrases):
-            vector = self.get_vector(phrase)
-            vectors_list.append(np.array([vector]))
-        
-        vectors = np.concatenate(vectors_list)
-        return vectors
+      vectors_list = []
+      print(phrases)
+      for i, phrase in enumerate(phrases):
+          vector = self.get_vector(phrase)
+          vectors_list.append(np.array([vector]))
+    
+      vectors = np.concatenate(vectors_list)
+      return vectors
         
     @staticmethod
     def compute_sif_weights(sentences: List[str], alpha: float) -> Dict[str, float]:
