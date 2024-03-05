@@ -110,8 +110,33 @@ def draw_graph(
         else:
             pyvis_graph.show_buttons()
 
+    # Set physics options to avoid overlap
+    pyvis_graph.set_options("""
+        var options = {
+            "edges": {
+                "smooth": {
+                    "type": "continuous"
+                }
+            },
+            "physics": {
+                "enabled": true,
+                "solver": "forceAtlas2Based",
+                "forceAtlas2Based": {
+                    "gravitationalConstant": -100,
+                    "springLength": 150,
+                    "springConstant": 0.01,
+                    "damping": 0.4,
+                    "avoidOverlap": 1
+                },
+                "minVelocity": 0.75,
+                "timestep": 0.5
+            }
+        }
+    """)
+
     # Make sure edges aren't written on one another
     pyvis_graph.set_edge_smooth("dynamic")
 
     # return and also save
     return pyvis_graph.show(output_filename)
+
