@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-def is_negation_gr(verb, negs=["δεν", "μην"], neg_deps=["advmod", "neg"]):
+def is_negation_gr(verb, negs=["δεν", "μην", "οχι"], neg_deps=["advmod", "neg"]):
     """
     Identify if the verb is negated in the Greek sentence.
 
@@ -319,15 +319,17 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
 
     for i, verb in enumerate(all_verbs):
         # negation
-        negation = is_negation_gr(verb)
+        negation = is_negation(verb)
 
         # subjects
         subjs = []
-        subjs.extend(get_deps_gr(verb, deps=["nsubj"]))  # active forms
-        subjs.extend(get_deps_gr(verb, deps=["agent"]))  # passive forms
+        subjs.extend(get_deps(verb, deps=["nsubj"]))  # active forms
+        agents = get_deps(verb, deps=["agent"])  # passive forms
+        for a in agents:
+            subjs.extend(get_deps(a, deps=["pobj"]))
 
         for k, subj in enumerate(subjs):
-            if subj.text in ["ποιος", "που"]:
+            if subj.text in ["ποιος", "ποιου", "ποιον", "ποια","ποιο"]:
                 for tok in sent:
                     for t in tok.rights:
                         if t == verb:
@@ -357,18 +359,8 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
 
         # objects
         objs = []
-        objs.extend(get_deps_gr(verb, deps=["dobj"]))  # active forms
-        objs.extend(get_deps_gr(verb, deps=["nsubjpass"]))  # passive forms
-
-        for k, obj in enumerate(objs):
-            if obj.text in ["ποιον", "που"]:
-                for tok in sent:
-                    for t in tok.rights:
-                        if t == verb:
-                            objs[k] = tok
-                    for t in tok.lefts:
-                        if t == verb:
-                            objs[k] = tok
+        objs.extend(get_deps(verb, deps=["dobj"]))  # active forms
+        objs.extend(get_deps(verb, deps=["nsubjpass"]))  # passive forms
 
         if len(objs) != 0:
             temp = objs.copy()
