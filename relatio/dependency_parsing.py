@@ -311,7 +311,7 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
         print("Verb:", verb.text)
 
         # negation
-        negation = is_negation(verb)
+        negation = is_negation_gr(verb)
         print("Negation:", negation)
 
         # subjects
@@ -360,7 +360,7 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
 
         # objects
         objs = []
-        objs.extend(get_deps(verb, deps=["dobj"]))  # active forms
+        objs.extend(get_deps(verb, deps=["dobj", "iobj", "obj", "obl", "nmod"]))  # active forms
         objs.extend(get_deps(verb, deps=["nsubjpass"]))  # passive forms
         print("Objects:", objs)
 
