@@ -305,25 +305,19 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
     svos = []
 
     all_verbs = filter_pos(sent, pos=["VERB"])
-    print("All verbs:", all_verbs)
 
     for i, verb in enumerate(all_verbs):
-        print("Verb:", verb.text)
 
         # negation
         negation = is_negation_gr(verb)
-        print("Negation:", negation)
 
         # subjects
         subjs = []
         subjs.extend(get_deps(verb, deps=["nsubj"]))  # active forms
         agents = get_deps(verb, deps=["agent"])  # passive forms
-        print("Active form subjects:", subjs)
-        print("Passive form agents:", agents)
 
         for a in agents:
             subjs.extend(get_deps(a, deps=["pobj"]))
-        print("Combined subjects:", subjs)
 
         for k, subj in enumerate(subjs):
             if subj.text in ["ποιος", "ποιου", "ποιον", "ποια","ποιο"]:
@@ -342,7 +336,6 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
                     for t in subj.subtree:
                         if t.dep_ == "conj":
                             subjs.append(t)
-            print("Expanded subjects:", subjs)
 
             if expand_nouns:
                 for k, subj in enumerate(subjs):
@@ -350,19 +343,16 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
                         subj_text = subj._.noun_chunk.text
                     else:
                         subj_text = subj.text
-                    print("Expanded subject:", subj_text)
                     subjs[k] = subj_text
             else:
                 subjs = [subj.text for subj in subjs]
         elif not only_triplets:
             subjs = [""]
-        print("Final subjects:", subjs)
 
         # objects
         objs = []
         objs.extend(get_deps(verb, deps=["dobj", "iobj", "obj", "obl", "nmod"]))  # active forms
         objs.extend(get_deps(verb, deps=["nsubjpass"]))  # passive forms
-        print("Objects:", objs)
 
         if len(objs) != 0:
             temp = objs.copy()
@@ -371,7 +361,6 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
                     for t in obj.subtree:
                         if t.dep_ == "conj":
                             objs.append(t)
-            print("Expanded objects:", objs)
 
             if expand_nouns:
                 for k, obj in enumerate(objs):
@@ -379,21 +368,17 @@ def extract_svos_gr(sent, expand_nouns: bool = True, only_triplets: bool = True)
                         obj_text = obj._.noun_chunk.text
                     else:
                         obj_text = obj.text
-                    print("Expanded object:", obj_text)
                     objs[k] = obj_text
             else:
                 objs = [obj.text for obj in objs]
         elif not only_triplets:
             objs = [""]
-        print("Final objects:", objs)
 
         # packaging
         for subj in subjs:
             for obj in objs:
                 svo = (subj, negation, verb.text, obj)
                 svos.append(svo)
-        print("Current SVOs:", svos)
-
     return svos
 
 
