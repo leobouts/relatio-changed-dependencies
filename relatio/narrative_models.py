@@ -193,10 +193,11 @@ class NarrativeModel:
                     phrases.append(item[role])
                     
             # Remove known entities for the training of unknown entities
-            if role in self.roles_with_known_entities:
+            if role in self.roles_with_known_entities and phrases:
                 if self.assignment_to_known_entities == "character_matching":
                     idx = self.character_matching(phrases, progress_bar)[0]
                 elif self.assignment_to_known_entities == "embeddings":
+                    print('i am here outside:', phrases)
                     vectors = self.embeddings_model.get_vectors(phrases, progress_bar)
                     idx = _embeddings_similarity(
                         vectors, self.vectors_known_entities, self.threshold
@@ -217,7 +218,11 @@ class NarrativeModel:
             phrase for i, phrase in enumerate(phrases_to_embed) if i not in idx
         ]
         self.training_vectors = vectors[~np.isnan(vectors).any(axis=1)]
+        # Set n_components based on the dimensions of the training_vectors
+        n_components = min(self.training_vectors.shape[0], self.training_vectors.shape[1])
 
+        # Update pca_args with the adjusted n_components value
+        pca_args['n_components'] = n_components
         # Dimension reduction via PCA
         if self.PCA:
             if progress_bar:
@@ -425,6 +430,7 @@ class NarrativeModel:
             if (
                 role in self.roles_with_known_entities
                 and self.assignment_to_known_entities == "character_matching"
+                and phrases
             ):
                 idx, labels_known_entities = self.character_matching(
                     phrases, progress_bar
@@ -440,7 +446,7 @@ class NarrativeModel:
             # Match known entities (with embeddings distance)
             if (
                 role in self.roles_with_known_entities
-                and self.assignment_to_known_entities == "embeddings"
+                and self.assignment_to_known_entities == "embeddings" and phrases
             ):
                 phrases_to_embed = phrases.copy()
                 phrase_index = [i for i, p in enumerate(phrases_to_embed)]
@@ -472,7 +478,7 @@ class NarrativeModel:
                     all_labels[phrase_index[k]] = labels_known_entities[i]
 
             # Predict unknown entities (with clustering model)
-            if role in self.roles_with_unknown_entities:
+            if role in self.roles_with_unknown_entities and phrases:
                 if progress_bar:
                     print("Matching unknown entities (with clustering model)...")
 
